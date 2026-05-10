@@ -1,6 +1,6 @@
 # MATH 189 Project — Airbnb Price Analysis Across European Cities (SP26)
 
-A statistical data analysis project for MATH 189 (Spring 2026) examining what drives Airbnb nightly prices across 10 major European cities. The project covers data merging, exploratory analysis, preprocessing, and a suite of inferential hypothesis tests.
+A statistical data analysis project for MATH 189 (Spring 2026) examining what drives Airbnb nightly prices across 10 major European cities. The project covers data merging, exploratory analysis, preprocessing, inferential hypothesis testing, regression modelling, regularisation, and advanced machine-learning techniques.
 
 ---
 
@@ -19,13 +19,26 @@ A statistical data analysis project for MATH 189 (Spring 2026) examining what dr
 
 ## Project Overview
 
-This project investigates factors that influence short-term rental pricing on Airbnb using data from 10 European cities. The analysis tests several research questions through formal hypothesis tests:
+This project investigates factors that influence short-term rental pricing on Airbnb using data from 10 European cities. The analysis is structured across five phases:
 
+**Phase 1 — Data Foundation & EDA ✅**
 - Do nightly prices differ significantly between weekday and weekend stays?
 - Are price variances equal across cities?
 - Is the distribution of room types independent of city or day type?
 - Do superhost listings command a price premium?
 - Do mean log-prices differ across cities, and if so, which pairs differ?
+
+**Phase 2 — Probability & Statistical Inference ✅**
+- Formal hypothesis testing: K-S tests, Levene's test, chi-square tests, Welch's t-test, one-way ANOVA with Tukey HSD post-hoc.
+
+**Phase 3 — Regression**
+- Multiple linear regression (baseline) with VIF checks and residual diagnostics.
+
+**Phase 4 — Variable Selection & Regularisation**
+- Stepwise selection (AIC/BIC), Ridge, LASSO, and cross-validated comparison.
+
+**Phase 5 — Advanced Techniques**
+- PCA + K-Means clustering, XGBoost, SHAP feature importance, Elastic Net with interaction terms, and conformal prediction intervals.
 
 ---
 
@@ -58,6 +71,9 @@ This project investigates factors that influence short-term rental pricing on Ai
 ├── data_merge.ipynb               # Step 1: Merge raw CSVs into merged_data.csv
 ├── phase_1.ipynb                  # Step 2: EDA, cleaning, preprocessing
 ├── phase_2.ipynb                  # Step 3: Hypothesis tests
+├── phase_3.ipynb                  # Step 4: Multiple linear regression (planned)
+├── phase_4.ipynb                  # Step 5: Variable selection & regularisation (planned)
+├── phase_5.ipynb                  # Step 6: PCA, XGBoost, SHAP, Elastic Net, conformal (planned)
 │
 ├── merged_data.csv                # Output of data_merge.ipynb (raw merged data)
 ├── cleaned_data_transformed.csv   # Output of phase_1.ipynb (cleaned + features)
@@ -122,33 +138,33 @@ Raw data is stored in `Data/` as 20 CSV files (10 cities × 2 day types: weekday
 
 ## Workflow
 
-The project is structured as three sequential notebooks:
+The project is structured as sequential notebooks across five phases:
 
-### 1. `data_merge.ipynb` — Data Merging
+### 1. `data_merge.ipynb` — Data Merging ✅
 
-Reads all 20 raw CSV files from `Data/`, attaches `city` (integer code) and `weekday` (0/1) columns, and concatenates them into a single file:
+Reads all 20 raw CSV files from `Data/`, attaches `city` (integer code) and `is_weekday` (0/1) columns, and concatenates them into a single file:
 
-**Output:** `merged_data.csv`
+**Output:** `merged_data.csv` (51,707 rows × 21 columns)
 
-### 2. `phase_1.ipynb` — EDA, Cleaning & Preprocessing
+### 2. `phase_1.ipynb` — EDA, Cleaning & Preprocessing ✅
 
 Loads `merged_data.csv` and performs:
 
-- **Descriptive statistics** (mean, median, std, skewness, kurtosis) overall and per city
-- **Outlier removal:** rows above the 99th percentile of `realSum` are dropped
+- **Descriptive statistics** (mean, median, std, skewness, kurtosis) overall and per city — before and after outlier removal
+- **Outlier removal:** rows above the 99th percentile of `realSum` (> €1,160.84) are dropped (518 rows removed; 51,189 remaining)
 - **Preprocessing:**
   - Log-transforms `realSum` → `logSum`
-  - One-hot encodes `room_type` into three binary columns
+  - One-hot encodes `room_type` into three binary columns (`room_type_apt`, `room_type_private`, `room_type_shared`)
   - Encodes `host_is_superhost` as `is_superhost` (0/1)
   - Drops redundant columns (`room_shared`, `room_private`, `lng`, `lat`)
   - Renames `weekday` → `is_weekday`
 - **Distribution visualisations** (see [Generated Figures](#generated-figures))
 
-**Output:** `cleaned_data_transformed.csv`
+**Output:** `cleaned_data_transformed.csv` (51,189 rows × 20 columns)
 
-### 3. `phase_2.ipynb` — Hypothesis Testing
+### 3. `phase_2.ipynb` — Hypothesis Testing ✅
 
-Loads `cleaned_data_transformed.csv` and runs five formal tests on `logSum`:
+Loads `cleaned_data_transformed.csv` and runs formal tests on `logSum`:
 
 | Test | Question |
 |------|----------|
@@ -156,12 +172,36 @@ Loads `cleaned_data_transformed.csv` and runs five formal tests on `logSum`:
 | **Levene's test** | Are the log(price) variances equal across all 10 cities? |
 | **Chi-square (independence)** | Is room type independent of city? |
 | **Chi-square (independence)** | Is room type independent of weekday vs. weekend? |
-| **Welch's t-test** | Do superhost listings charge significantly more than non-superhost listings? |
-| **One-way ANOVA + Tukey HSD** | Do mean log(price) values differ across cities, and which pairs are significantly different? |
+| **Welch's t-test + Cohen's d** | Do superhost listings charge significantly more than non-superhost listings? |
+| **One-way ANOVA + η² + Tukey HSD** | Do mean log(price) values differ across cities, and which pairs are significantly different? |
+
+### 4. `phase_3.ipynb` — Regression *(planned)*
+
+- **Multiple Linear Regression (baseline):** all numeric features + city dummies + `is_weekday`
+- VIF check for multicollinearity
+- Residual diagnostics: QQ-plot, scale-location plot
+- Interpretation of coefficients
+
+### 5. `phase_4.ipynb` — Variable Selection & Regularisation *(planned)*
+
+- **Stepwise selection:** forward and backward using AIC/BIC
+- **Ridge regression:** tune λ via cross-validation
+- **LASSO regression:** tune λ via cross-validation; automatic feature selection
+- Compare CV-RMSE across all models
+
+### 6. `phase_5.ipynb` — Advanced Techniques *(planned)*
+
+- **PCA + K-Means Clustering:** standardise numeric features (excluding city dummies); run PCA with scree plot and biplot (coloured by city); run K-Means in PCA space; elbow method + silhouette scores; crosstab clusters vs. city
+- **XGBoost:** train price regressor; tune hyperparameters with cross-validation
+- **SHAP Feature Importance:** global bar plot + beeswarm; partial dependence plots for top features
+- **Elastic Net with interaction terms:** construct interaction terms (e.g. `superhost_apt`, `apt_capacity`, `dist_weekday`); tune mixing parameter α and λ via CV; compare CV-RMSE to XGBoost
+- **Conformal Prediction Intervals:** apply split-conformal inference on XGBoost residuals; compare interval widths vs. OLS prediction intervals
 
 ---
 
 ## Analysis Summary
+
+### Completed (Phases 1 & 2)
 
 | Test | Result |
 |------|--------|
@@ -169,8 +209,20 @@ Loads `cleaned_data_transformed.csv` and runs five formal tests on `logSum`:
 | Levene's test (variance across cities) | Rejected H₀ — price variability differs significantly across cities |
 | Chi-square (room type × city) | Rejected H₀ — room type distribution is not uniform across cities |
 | Chi-square (room type × day type) | Conclusion depends on data; tested at α = 0.05 |
-| Welch's t-test (superhost premium) | Rejected H₀ — superhost listings command a statistically significant price premium |
-| One-way ANOVA (mean log-price across cities) | Rejected H₀ — at least one city mean differs; Tukey HSD identifies specific pairs |
+| Welch's t-test + Cohen's d (superhost premium) | Rejected H₀ — superhost listings command a statistically significant price premium |
+| One-way ANOVA + η² + Tukey HSD (mean log-price across cities) | Rejected H₀ — at least one city mean differs; Tukey HSD identifies all 45 specific pairs |
+
+### Planned (Phases 3–5)
+
+| Phase | Technique | Goal |
+|-------|-----------|------|
+| 3 | Multiple Linear Regression | Baseline model; VIF & residual diagnostics |
+| 4 | Stepwise, Ridge, LASSO | Variable selection; CV-RMSE comparison |
+| 5 | PCA + K-Means | Unsupervised structure; cluster vs. city alignment |
+| 5 | XGBoost | Non-linear price prediction |
+| 5 | SHAP | Global and local feature importance |
+| 5 | Elastic Net + interactions | Regularised model with engineered features |
+| 5 | Conformal Prediction | Calibrated prediction intervals |
 
 ---
 
@@ -199,12 +251,14 @@ scikit-learn
 statsmodels
 matplotlib
 seaborn
+xgboost
+shap
 ```
 
 Install all dependencies with:
 
 ```bash
-pip install pandas numpy scipy scikit-learn statsmodels matplotlib seaborn
+pip install pandas numpy scipy scikit-learn statsmodels matplotlib seaborn xgboost shap
 ```
 
 ---
@@ -222,6 +276,15 @@ jupyter notebook phase_1.ipynb
 
 # Step 3 – hypothesis testing
 jupyter notebook phase_2.ipynb
+
+# Step 4 – regression (planned)
+jupyter notebook phase_3.ipynb
+
+# Step 5 – variable selection & regularisation (planned)
+jupyter notebook phase_4.ipynb
+
+# Step 6 – advanced techniques (planned)
+jupyter notebook phase_5.ipynb
 ```
 
 > **Note:** `data_merge.ipynb` uses a hard-coded local `data_dir` path. Update the `data_dir` and `out_path` variables in that notebook to point to the `Data/` directory and your desired output location before running.
