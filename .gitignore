@@ -13,6 +13,8 @@ dist/
 build/
 .eggs/
 
+# Data files
+
 # Virtual environments
 .venv/
 venv/
