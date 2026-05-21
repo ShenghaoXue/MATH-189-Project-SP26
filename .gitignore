@@ -13,15 +13,13 @@ dist/
 build/
 .eggs/
 
+# Data files
+
 # Virtual environments
 .venv/
 venv/
 env/
 ENV/
-
-# Generated / processed data
-cleaned_data_transformed.csv
-merged_data.csv
 
 # macOS
 .DS_Store
