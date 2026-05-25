@@ -1,6 +1,8 @@
 # MATH 189 Airbnb Price Modeling Project
 
-This repository contains a complete analysis workflow for a MATH 189 project on Airbnb listing prices across ten European cities. The project starts from raw weekday/weekend city CSV files, builds a cleaned modeling dataset, runs exploratory analysis and hypothesis tests, develops linear-regression baselines, evaluates feature-selection and regularized linear models, and finishes with advanced XGBoost, SHAP, and targeted Elastic Net modeling.
+This repository contains a complete analysis workflow for a MATH 189 project on Airbnb listing prices across ten European cities. The project is motivated by Gyódi and Nawaro's 2021 study, ["Determinants of Airbnb prices in European cities: A spatial econometrics approach"](https://www.sciencedirect.com/science/article/pii/S0261517721000388), which studies Airbnb price determinants with an emphasis on location, accessibility, and spatial dependence.
+
+The project uses the supplementary dataset released with that study on [Zenodo](https://zenodo.org/records/4446043). Starting from those raw weekday/weekend city CSV files, this repository builds a cleaned modeling dataset, runs exploratory analysis and hypothesis tests, develops linear-regression baselines, evaluates feature-selection and regularized linear models, and finishes with advanced XGBoost, SHAP, and targeted Elastic Net modeling.
 
 The main target variable is `logSum`, the log-transformed Airbnb listing price. The raw price variable `realSum` is preserved for descriptive analysis.
 
@@ -21,7 +23,9 @@ The main target variable is `logSum`, the log-transformed Airbnb listing price. 
 
 ## Data
 
-The raw data live in `Data/` and contain weekday/weekend Airbnb listings for:
+The raw data live in `Data/` and come from Gyódi and Nawaro's Zenodo supplementary material. The Zenodo record provides weekday and weekend Airbnb listing files for each city, along with variables covering price, room type, host/listing attributes, ratings, distance to city center and metro, attraction accessibility, restaurant accessibility, and coordinates.
+
+This project uses the weekday/weekend Airbnb listings for:
 
 - Amsterdam
 - Athens
@@ -258,4 +262,3 @@ Potential extensions include:
 - adding automated checks that every notebook plot save path points to `plots/`,
 - comparing Elastic Net interactions against a small set of nonlinear splines,
 - using permutation importance alongside SHAP for additional model interpretation.
-
