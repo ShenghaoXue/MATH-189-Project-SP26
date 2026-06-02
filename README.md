@@ -12,6 +12,7 @@ The main target variable is `logSum`, the log-transformed Airbnb listing price. 
 .
 ├── Data/                                  # Raw city weekday/weekend CSV files
 ├── plots/                                 # Generated PNG figures used by notebooks/report
+├── plots_overleaf/                        # Report-ready PNG figures used by Overleaf/main.tex
 ├── merged_data.csv                        # Cleaned merged dataset produced by Section 1
 ├── section1_cleaning_and_EDA.ipynb        # Data cleaning and exploratory analysis
 ├── section2_hypothesis_testing.ipynb      # Statistical hypothesis tests
@@ -61,7 +62,7 @@ The current cleaned dataset has:
 | `multi` | Multiple-listing host indicator |
 | `biz` | Business-host indicator |
 | `cleanliness_rating` | Cleanliness rating |
-| `guest_satisfaction_overall` | Overall guest satisfaction rating |
+| `satisfaction_rating` | Overall guest satisfaction rating |
 | `bedrooms` | Bedroom count |
 | `dist` | Distance from city center |
 | `metro_dist` | Distance from nearest metro/transit station |
@@ -158,35 +159,22 @@ Section 5 uses three advanced modeling layers:
 3. **Targeted Elastic Net**  
    Starts from the city fixed-effects linear baseline and adds only selected pairwise interactions. The interaction set is deliberately compact: it is based on SHAP dependence plots and PCA feature groupings rather than a broad expansion of all possible interactions.
 
-The targeted Elastic Net interaction set includes relationships among:
+The targeted Elastic Net interaction set currently includes:
 
-- distance and attraction access
-- distance and restaurant access
-- attraction and restaurant access
-- city-center distance and metro distance
-- guest satisfaction and cleanliness
-- guest satisfaction and location/access measures
-- superhost status and rating variables
-- room type and guest satisfaction
+- distance with attraction access, restaurant access, and metro distance
+- attraction access with restaurant access
+- cleanliness rating with satisfaction rating
+- superhost status with satisfaction rating and cleanliness rating
+- city fixed-effect interactions with restaurant access for Athens, Barcelona, Berlin, Budapest, Lisbon, London, Paris, Rome, and Vienna
+- city fixed-effect interactions with attraction access for Athens, Barcelona, Berlin, Budapest, Lisbon, London, Paris, Rome, and Vienna
+- selected city fixed-effect interactions with private-room status for London and Paris
+- selected city fixed-effect interactions with entire-apartment status for Athens and London
 
 This keeps the design interpretable and avoids the earlier high-dimensional interaction expansion.
 
 ## Figures
 
-All generated figures are stored in `plots/`. File names follow this convention:
-
-```text
-sectionX_PlotFunctionY_optionalDescription.png
-```
-
-Examples:
-
-- `section1_PlotDistribution1_overall.png`
-- `section4_PlotComparison1_linearModels.png`
-- `section5_PlotSHAP3_tunedXGBBarImportance.png`
-- `section5_PlotComparison1_advancedModels.png`
-
-The notebooks save figures directly into `plots/`, so rerunning notebooks should refresh the relevant PNG files in place.
+Report-ready figures are stored in `plots_overleaf/`. The notebooks save current report figures directly into `plots_overleaf/`, so rerunning notebooks should refresh the relevant PNG files in place.
 
 ## Reproducing the Analysis
 
@@ -232,7 +220,7 @@ Section 1 creates `merged_data.csv`, which is required by Sections 2-5.
 After running the notebooks:
 
 - `merged_data.csv` should exist in the project root.
-- PNG figures should be saved in `plots/`.
+- PNG figures should be saved in `plots_overleaf/`.
 - model-comparison tables should display inside the relevant notebooks.
 
 ## Reproducibility Notes
@@ -259,6 +247,6 @@ Potential extensions include:
 
 - adding a pinned `requirements.txt` or Conda environment file,
 - exporting final notebook outputs into a reproducible report build,
-- adding automated checks that every notebook plot save path points to `plots/`,
+- adding automated checks that every notebook plot save path points to `plots_overleaf/`,
 - comparing Elastic Net interactions against a small set of nonlinear splines,
 - using permutation importance alongside SHAP for additional model interpretation.
