@@ -1,4 +1,4 @@
-realSum,logSum,room_type_apt,room_type_private,room_type_shared,person_capacity,is_superhost,multi,biz,cleanliness_rating,guest_satisfaction_overall,bedrooms,dist,metro_dist,attr_index,rest_index,city,is_weekday
+realSum,logSum,room_type_apt,room_type_private,room_type_shared,person_capacity,is_superhost,multi,biz,cleanliness_rating,satisfaction_rating,bedrooms,dist,metro_dist,attr_index,rest_index,city,is_weekday
 194.03369812293488,5.268031845643553,0,1,0,2.0,0,1,0,10.0,93.0,1,5.022963798088291,2.539380002594493,78.69037927190317,98.25389587009934,Amsterdam,1
 344.2457760176224,5.8413558674321715,0,1,0,4.0,0,0,0,8.0,85.0,1,0.4883892888289836,0.2394039228349863,631.1763782503964,837.2807567422693,Amsterdam,1
 264.1014224451058,5.57633320529807,0,1,0,2.0,0,0,1,9.0,87.0,1,5.748311915159562,3.651621288793656,75.27587691428164,95.3869549262145,Amsterdam,1
