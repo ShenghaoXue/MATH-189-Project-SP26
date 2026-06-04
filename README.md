@@ -1,6 +1,6 @@
-# MATH 189 Airbnb Price Modeling Project
+# Predicting Airbnb Prices in Europe
 
-This repository contains a complete analysis workflow for a MATH 189 project on Airbnb listing prices across ten European cities. The project is motivated by Gyódi and Nawaro's 2021 study, ["Determinants of Airbnb prices in European cities: A spatial econometrics approach"](https://www.sciencedirect.com/science/article/pii/S0261517721000388), which studies Airbnb price determinants with an emphasis on location, accessibility, and spatial dependence.
+This repository contains a complete analysis workflow for a project on Airbnb listing prices across ten European cities. The project is motivated by Gyódi and Nawaro's 2021 study, ["Determinants of Airbnb prices in European cities: A spatial econometrics approach"](https://www.sciencedirect.com/science/article/pii/S0261517721000388), which studies Airbnb price determinants with an emphasis on location, accessibility, and spatial dependence.
 
 The project uses the supplementary dataset released with that study on [Zenodo](https://zenodo.org/records/4446043). Starting from those raw weekday/weekend city CSV files, this repository builds a cleaned modeling dataset, runs exploratory analysis and hypothesis tests, develops linear-regression baselines, evaluates feature-selection and regularized linear models, and finishes with advanced XGBoost, SHAP, and targeted Elastic Net modeling.
 
